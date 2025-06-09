@@ -128,33 +128,33 @@ class GildedRoseTest(unittest.TestCase):
                 self.assertEqual(expected_quality, items[0].quality,
                                f"Failed for {description}")
 
-    # def test_conjured_items_quality_boundaries(self):
-    #     test_cases = [
-    #         # (initial_quality, sell_in, expected_quality, description)
-    #         (2, 10, 0, "Quality at 2 should go to 0"),
-    #         (1, 10, 0, "Quality at 1 should go to 0"),
-    #         (0, 10, 0, "Quality at 0 should stay at 0"),
-    #         (4, 0, 0, "Quality at 4 after sell by should go to 0"),
-    #         (3, 0, 0, "Quality at 3 after sell by should go to 0"),
-    #         (2, 0, 0, "Quality at 2 after sell by should go to 0"),
-    #         (1, 0, 0, "Quality at 1 after sell by should go to 0"),
-    #         (0, 0, 0, "Quality at 0 after sell by should stay at 0"),
-    #     ]
+    def test_conjured_items_quality_boundaries(self):
+        test_cases = [
+            # (initial_quality, sell_in, expected_quality, description)
+            (2, 10, 0, "Quality at 2 should go to 0"),
+            (1, 10, 0, "Quality at 1 should go to 0"),
+            (0, 10, 0, "Quality at 0 should stay at 0"),
+            (4, 0, 0, "Quality at 4 after sell by should go to 0"),
+            (3, 0, 0, "Quality at 3 after sell by should go to 0"),
+            (2, 0, 0, "Quality at 2 after sell by should go to 0"),
+            (1, 0, 0, "Quality at 1 after sell by should go to 0"),
+            (0, 0, 0, "Quality at 0 after sell by should stay at 0"),
+        ]
         
-    #     for initial_quality, sell_in, expected_quality, description in test_cases:
-    #         with self.subTest(description=description,
-    #                         initial_quality=initial_quality,
-    #                         sell_in=sell_in):
-    #             # Arrange
-    #             items = [Item("Conjured Item", sell_in, initial_quality)]
-    #             gilded_rose = GildedRose(items)
+        for initial_quality, sell_in, expected_quality, description in test_cases:
+            with self.subTest(description=description,
+                            initial_quality=initial_quality,
+                            sell_in=sell_in):
+                # Arrange
+                items = [Item("Conjured Item", sell_in, initial_quality)]
+                gilded_rose = GildedRose(items)
                 
-    #             # Act
-    #             gilded_rose.update_quality()
+                # Act
+                gilded_rose.update_quality()
                 
-    #             # Assert
-    #             self.assertEqual(expected_quality, items[0].quality,
-    #                            f"Failed for {description}")
+                # Assert
+                self.assertEqual(expected_quality, items[0].quality,
+                               f"Failed for {description}")
 
     def test_sulfuras_quality_boundaries(self):
         test_cases = [

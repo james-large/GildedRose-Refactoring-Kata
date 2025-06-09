@@ -10,6 +10,8 @@ DEFAULT_MIN_QUALITY = 0
 SULFURAS_QUALITY = 80
 BACKSTAGE_PASS_THRESHOLD_1 = 10
 BACKSTAGE_PASS_THRESHOLD_2 = 5
+
+
 class Item:
     def __init__(self, name, sell_in, quality):
         self.name = name
