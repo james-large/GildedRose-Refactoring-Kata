@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 import unittest
+from unittest.mock import Mock
 
-from gilded_rose import Item, GildedRose
+from gilded_rose import Item, GildedRose, StandardRule, AgedBrieRule, BackstagePassesRule, SulfurasRule, ConjuredRule, ItemRule
 
 
 class GildedRoseTest(unittest.TestCase):
@@ -179,6 +180,53 @@ class GildedRoseTest(unittest.TestCase):
                                f"Failed for {description}")
                 self.assertEqual(sell_in, items[0].sell_in,
                                f"Failed for {description}")
+
+    def test_rule_mapping(self):
+        """Test that the correct rule is selected for each item type."""
+        test_cases = [
+            ("Aged Brie", AgedBrieRule),
+            ("Backstage passes to a TAFKAL80ETC concert", BackstagePassesRule),
+            ("Sulfuras, Hand of Ragnaros", SulfurasRule),
+            ("Conjured Gold", ConjuredRule),
+            ("Conjured Pet", ConjuredRule),
+            ("Normal Item", StandardRule),
+            ("Random Item", StandardRule),
+        ]
+        
+        # explicity passing rules=None to test default rule mapping
+        gilded_rose = GildedRose(items=[], rules=None)
+        
+        for item_name, expected_rule_type in test_cases:
+            with self.subTest(item_name=item_name):
+                # Arrange
+                item = Item(item_name, 10, 20)
+                
+                # Act
+                rule = gilded_rose._get_rule(item)
+                
+                # Assert
+                self.assertIsInstance(rule, expected_rule_type,
+                    f"Expected {expected_rule_type.__name__} for item '{item_name}', "
+                    f"but got {type(rule).__name__}")
+
+    def test_custom_rule_mapping(self):
+        """Test that custom rule mappings can be provided."""
+        # Arrange
+        mock_rule = Mock(spec=ItemRule)
+        custom_rules = {"Custom Item": mock_rule}
+        gilded_rose = GildedRose([], rules=custom_rules)
+        
+        # Act
+        item = Item("Custom Item", 10, 20)
+        rule = gilded_rose._get_rule(item)
+        
+        # Assert
+        self.assertIs(rule, mock_rule, "Custom rule should be returned for custom item")
+        
+        # Test default rule for unknown items
+        unknown_item = Item("Unknown Item", 10, 20)
+        rule = gilded_rose._get_rule(unknown_item)
+        self.assertIsInstance(rule, StandardRule, "Default rule should be returned for unknown items")
 
 
 if __name__ == '__main__':

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from typing import Protocol, Sequence
+from typing import Optional, Protocol, Sequence
 from abc import abstractmethod
 
 
@@ -114,13 +114,17 @@ class ConjuredRule(ItemRule):
 
 
 class GildedRose(object):
-    def __init__(self, items: Sequence[Item]):
+    def __init__(self, items: Sequence[Item], rules: Optional[dict[str, ItemRule]] = None):
         self.items = items
-        self._rules = {
+        self._rules = rules or self._default_rules()
+
+    def _default_rules(self) -> dict[str, ItemRule]:
+        """Create the default rule mapping."""
+        return {
             "Aged Brie": AgedBrieRule(),
             "Backstage passes to a TAFKAL80ETC concert": BackstagePassesRule(),
             "Sulfuras, Hand of Ragnaros": SulfurasRule(),
-            "Conjured": ConjuredRule(), # I've taken the 
+            "Conjured": ConjuredRule(),
         }
 
     def _get_rule(self, item: Item) -> ItemRule:
