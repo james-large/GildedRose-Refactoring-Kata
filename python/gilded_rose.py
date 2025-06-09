@@ -5,6 +5,12 @@ class GildedRose(object):
     def __init__(self, items):
         self.items = items
 
+    def _normalize_quality(self, item):
+        """Ensure quality is never negative and never above 50 (except for Sulfuras)."""
+        if item.name != "Sulfuras, Hand of Ragnaros":
+            item.quality = max(0, min(50, item.quality))
+        return item.quality
+
     def update_quality(self):
         for item in self.items:
             if item.name != "Aged Brie" and item.name != "Backstage passes to a TAFKAL80ETC concert":
@@ -34,6 +40,9 @@ class GildedRose(object):
                 else:
                     if item.quality < 50:
                         item.quality = item.quality + 1
+            
+            # Normalize quality at the end of each update
+            self._normalize_quality(item)
 
 
 class Item:
